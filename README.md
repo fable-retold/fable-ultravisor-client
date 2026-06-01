@@ -40,9 +40,9 @@ client.authenticate((err) => {
 
 Full documentation site: **[fable-retold.github.io/fable-ultravisor-client](https://fable-retold.github.io/fable-ultravisor-client/)**
 
-- **Quick Start** — install, authenticate, dispatch your first work item
-- **API Reference** — every method with verified signatures, plus the work-item shape
-- **Binary Frame Protocol** — the `binary-frames-v1` wire format used by `dispatchStream`
+- **Quick Start** - install, authenticate, dispatch your first work item
+- **API Reference** - every method with verified signatures, plus the work-item shape
+- **Binary Frame Protocol** - the `binary-frames-v1` wire format used by `dispatchStream`
 
 ## Surface
 
@@ -50,10 +50,10 @@ Full documentation site: **[fable-retold.github.io/fable-ultravisor-client](http
 |---|---|
 | `authenticate(cb)` | POST `/1.0/Authenticate`, captures session cookie. |
 | `request(method, path, body, cb, opts)` | Generic JSON HTTP round-trip. `opts.TimeoutMs` bounds the socket. |
-| `dispatch(workItem, cb)` | POST `/Beacon/Work/Dispatch` — synchronous JSON result. |
-| `dispatchStream(workItem, callbacks, cb)` | POST `/Beacon/Work/DispatchStream` — binary-framed streaming with `onProgress`, `onBinaryData`, `onError` callbacks. Final result includes `OutputBuffer` if binary output streamed. |
-| `triggerOperation(hash, parameters, cb)` | POST `/Operation/{hash}/Trigger` — operation entry point. Handles both JSON and `application/octet-stream` responses. |
-| `getStatus(cb)` | GET `/Beacon/Capabilities` — returns `{ Capabilities, BeaconCount }`. |
+| `dispatch(workItem, cb)` | POST `/Beacon/Work/Dispatch` - synchronous JSON result. |
+| `dispatchStream(workItem, callbacks, cb)` | POST `/Beacon/Work/DispatchStream` - binary-framed streaming with `onProgress`, `onBinaryData`, `onError` callbacks. Final result includes `OutputBuffer` if binary output streamed. |
+| `triggerOperation(hash, parameters, cb)` | POST `/Operation/{hash}/Trigger` - operation entry point. Handles both JSON and `application/octet-stream` responses. |
+| `getStatus(cb)` | GET `/Beacon/Capabilities` - returns `{ Capabilities, BeaconCount }`. |
 | `configure({ UltravisorURL, UserName, Password })` | Reconfigure at runtime. Clears session cookie. |
 | `isConfigured()` | `true` when an UltravisorURL is set. |
 | `getSessionCookie()` | Currently captured cookie (diagnostics). |
@@ -88,8 +88,8 @@ The `/Beacon/Work/DispatchStream` endpoint returns a chunked response with frame
 
 ## The client and the beacon
 
-This client is one end of a two-ended protocol. It dispatches work *into* an Ultravisor coordinator; [ultravisor-beacon](https://github.com/stevenvelozo/ultravisor-beacon) is the worker that registers with that same coordinator and *executes* the work. The coordinator sits between them — this client never talks to a beacon directly.
+This client is one end of a two-ended protocol. It dispatches work *into* an Ultravisor coordinator; [ultravisor-beacon](https://github.com/stevenvelozo/ultravisor-beacon) is the worker that registers with that same coordinator and *executes* the work. The coordinator sits between them - this client never talks to a beacon directly.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

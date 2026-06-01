@@ -50,7 +50,7 @@ let _Fable = new libFable(
 	}
 });
 
-// No options needed — settings come from fable.settings.UltravisorClient
+// No options needed - settings come from fable.settings.UltravisorClient
 let _Client = new libFableUltravisorClient(_Fable, {});
 ```
 
@@ -144,7 +144,7 @@ _Client.dispatchStream(
 	});
 ```
 
-The callbacks object is optional — pass `null` if you only care about the final result. See [Binary Frame Protocol](binary-frame-protocol.md) for the frame format.
+The callbacks object is optional - pass `null` if you only care about the final result. See [Binary Frame Protocol](binary-frame-protocol.md) for the frame format.
 
 ## 5. Trigger an Operation
 
@@ -196,5 +196,5 @@ _Client.getStatus(
 
 ## Next Steps
 
-- [API Reference](api.md) — Every method with verified signatures and options
-- [Binary Frame Protocol](binary-frame-protocol.md) — The wire format behind streaming dispatch
+- [API Reference](api.md) - Every method with verified signatures and options
+- [Binary Frame Protocol](binary-frame-protocol.md) - The wire format behind streaming dispatch

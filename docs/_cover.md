@@ -2,7 +2,7 @@
 
 > An HTTP client for the Ultravisor beacon coordinator
 
-Authenticate, dispatch work to remote beacons, and trigger operations — synchronous JSON, binary-framed streaming, and operation triggering, packaged as a Fable service.
+Authenticate, dispatch work to remote beacons, and trigger operations - synchronous JSON, binary-framed streaming, and operation triggering, packaged as a Fable service.
 
 - **Authentication** -- POST credentials, capture the session cookie, attach it automatically
 - **Synchronous Dispatch** -- Submit a work item, block on a single JSON result envelope

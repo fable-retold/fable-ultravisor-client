@@ -18,9 +18,9 @@ Every frame is a 5-byte header followed by a payload:
 +--------+------------------------+-------------------+
 ```
 
-- **Byte 0** — the frame *type* (one of the codes below), read as an unsigned 8-bit integer.
-- **Bytes 1–4** — the payload length `N`, an unsigned 32-bit integer in **big-endian** byte order.
-- **Bytes 5 … 5+N** — the payload. Its interpretation (JSON text or raw bytes) depends on the type.
+- **Byte 0** - the frame *type* (one of the codes below), read as an unsigned 8-bit integer.
+- **Bytes 1-4** - the payload length `N`, an unsigned 32-bit integer in **big-endian** byte order.
+- **Bytes 5 ... 5+N** - the payload. Its interpretation (JSON text or raw bytes) depends on the type.
 
 Frames are written back-to-back on the stream. There is no delimiter between frames; the length prefix is what bounds each one.
 
@@ -32,7 +32,7 @@ Frames are written back-to-back on the stream. There is no delimiter between fra
 | `0x02` | Intermediate binary data | Raw bytes | Passed to `onBinaryData` as a `Buffer`. |
 | `0x03` | Final binary output | Raw bytes | Accumulated; concatenated into `pResult.OutputBuffer`. |
 | `0x04` | Result metadata | JSON result envelope | Parsed and used as the base of `pResult`. |
-| `0x05` | Error | JSON, e.g. `{ Error }` | Parsed and passed to `onError`. Non-fatal — the stream continues. |
+| `0x05` | Error | JSON, e.g. `{ Error }` | Parsed and passed to `onError`. Non-fatal - the stream continues. |
 
 There is no on-the-wire frame for "end of stream"; the transport-level end of the chunked response signals completion. (On the coordinator side, an internal `end` signal simply closes the response.)
 
@@ -41,8 +41,8 @@ There is no on-the-wire frame for "end of stream"; the transport-level end of th
 `dispatchStream()` maintains a growing buffer and drains complete frames from the front of it:
 
 1. Incoming `data` chunks are appended to an internal buffer.
-2. While the buffer holds at least 5 bytes (a full header), the payload length is read from bytes 1–4.
-3. If the buffer does not yet contain the full `5 + N` bytes, parsing pauses and waits for more data — this is how a frame **split across two TCP chunks** is handled correctly.
+2. While the buffer holds at least 5 bytes (a full header), the payload length is read from bytes 1-4.
+3. If the buffer does not yet contain the full `5 + N` bytes, parsing pauses and waits for more data - this is how a frame **split across two TCP chunks** is handled correctly.
 4. Once a full frame is present, its type and payload are sliced off, the buffer is advanced past it, and the frame is dispatched by type.
 
 This means callers do not need to worry about chunk boundaries: a single frame may arrive in pieces, or several frames may arrive in one chunk, and the parser handles both.
@@ -54,11 +54,11 @@ When the response ends:
 - If a result frame (`0x04`) was seen, its parsed JSON becomes `pResult`. If any final-binary frames (`0x03`) were received, their bytes are concatenated and attached as `pResult.OutputBuffer` (a `Buffer`). The terminal callback fires with `(null, pResult)`.
 - If the stream ends **without** a result frame, the terminal callback fires with an error whose message contains `stream ended without result frame`.
 
-Malformed JSON inside a `0x01`, `0x04`, or `0x05` frame is silently ignored — a bad progress, result, or error frame does not abort the stream.
+Malformed JSON inside a `0x01`, `0x04`, or `0x05` frame is silently ignored - a bad progress, result, or error frame does not abort the stream.
 
 ## Error Responses Before the Stream
 
-If the coordinator rejects the request before streaming begins (HTTP 400 or higher — for example a missing `Capability`, or HTTP 503 when no beacons are registered), it returns a normal JSON body rather than frames. The client detects the non-2xx status, reads the JSON body, and surfaces it as a callback error using the body's `Error` field when present. No frame parsing occurs in that case.
+If the coordinator rejects the request before streaming begins (HTTP 400 or higher - for example a missing `Capability`, or HTTP 503 when no beacons are registered), it returns a normal JSON body rather than frames. The client detects the non-2xx status, reads the JSON body, and surfaces it as a callback error using the body's `Error` field when present. No frame parsing occurs in that case.
 
 ## Encoding a Frame
 
@@ -87,10 +87,10 @@ let tmpBinaryFrame = encodeFrame(0x03, libBuffer.from([ 0xBE, 0xEF ]));
 
 A typical streamed dispatch might place these frames on the wire, in order:
 
-1. `0x01` — `{ "Percent": 25, "Message": "working" }` (progress)
-2. `0x02` — raw intermediate bytes
-3. `0x03` — raw final-output bytes
-4. `0x04` — `{ "Success": true, "RunHash": "r1" }` (result metadata)
+1. `0x01` - `{ "Percent": 25, "Message": "working" }` (progress)
+2. `0x02` - raw intermediate bytes
+3. `0x03` - raw final-output bytes
+4. `0x04` - `{ "Success": true, "RunHash": "r1" }` (result metadata)
 
 After the response ends, the client delivers:
 

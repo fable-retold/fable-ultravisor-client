@@ -49,9 +49,9 @@ For each setting, the constructor reads the constructor options first, then fall
 
 | Setting | Source order | Default |
 |---------|-------------|---------|
-| `UltravisorURL` | `pOptions.UltravisorURL` → `fable.settings.UltravisorClient.UltravisorURL` | `''` |
-| `UserName` | `pOptions.UserName` → `fable.settings.UltravisorClient.UserName` | `''` |
-| `Password` | `pOptions.Password` (if a string) → `fable.settings.UltravisorClient.Password` (if a string) | `''` |
+| `UltravisorURL` | `pOptions.UltravisorURL` -> `fable.settings.UltravisorClient.UltravisorURL` | `''` |
+| `UserName` | `pOptions.UserName` -> `fable.settings.UltravisorClient.UserName` | `''` |
+| `Password` | `pOptions.Password` (if a string) -> `fable.settings.UltravisorClient.Password` (if a string) | `''` |
 
 The session cookie starts as `null` and is populated by `authenticate()`.
 
@@ -72,7 +72,7 @@ _Client.configure(
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `pConfig` | object | `{ UltravisorURL, UserName, Password }` — each property is applied only if it is a string |
+| `pConfig` | object | `{ UltravisorURL, UserName, Password }` - each property is applied only if it is a string |
 
 If `pConfig` is not a non-null object, the call is a no-op. The session cookie is cleared regardless of which fields were provided. Returns nothing.
 
@@ -127,7 +127,7 @@ _Client.authenticate(
 - `UltravisorURL` is not configured.
 - `UltravisorURL` is not a valid URL.
 - The response status is HTTP 400 or higher.
-- The response body parses to `{ LoggedIn: false }` — the coordinator rejected the credentials. The error includes the coordinator's `Error` text when present.
+- The response body parses to `{ LoggedIn: false }` - the coordinator rejected the credentials. The error includes the coordinator's `Error` text when present.
 - The response was HTTP 200 with no `LoggedIn: false` marker **and** no `Set-Cookie` header. This is treated as a failure so the caller never proceeds thinking it is authenticated when no session was captured.
 
 On success the callback receives `null`. When a logger is available on the instance, a successful authentication is logged at `info` level.
@@ -148,7 +148,7 @@ _Client.request('GET', '/1.0/SomeEndpoint', null,
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `pMethod` | string | Yes | HTTP method (`GET`, `POST`, `PUT`, `PATCH`, …) |
+| `pMethod` | string | Yes | HTTP method (`GET`, `POST`, `PUT`, `PATCH`, ...) |
 | `pPath` | string | Yes | URL path on the coordinator |
 | `pBody` | object \| null | No | Request body. Serialized to JSON and sent only when `pMethod` is `POST`, `PUT`, or `PATCH`. |
 | `fCallback` | function | Yes | `function (pError, pResult)` |
@@ -192,12 +192,12 @@ _Client.dispatch(
 
 **Validation** (each produces a callback error before any request is sent):
 
-- `pWorkItem` is missing or not an object — `dispatch requires a work item object.`
-- `pWorkItem.Capability` is missing — `dispatch work item requires Capability.`
+- `pWorkItem` is missing or not an object - `dispatch requires a work item object.`
+- `pWorkItem.Capability` is missing - `dispatch work item requires Capability.`
 
 **Socket timeout:** if the work item carries a positive numeric `TimeoutMs`, the underlying socket timeout is set to `TimeoutMs + 5000` (a 5-second grace over the coordinator-side cap) so a stuck dispatch does not hang forever. Otherwise the socket timeout is `0` (infinite).
 
-**Result:** `pResult` is the parsed JSON body from the coordinator — typically an `Outputs` envelope produced by the beacon handler. When no beacons are registered, the coordinator returns HTTP 503 and the callback receives an error whose message contains `No Beacon workers are registered.`
+**Result:** `pResult` is the parsed JSON body from the coordinator - typically an `Outputs` envelope produced by the beacon handler. When no beacons are registered, the coordinator returns HTTP 503 and the callback receives an error whose message contains `No Beacon workers are registered.`
 
 ## Work-Item Dispatch (Binary-Framed Streaming)
 
@@ -223,7 +223,7 @@ _Client.dispatchStream(
 |-----------|------|----------|-------------|
 | `pWorkItem` | object | Yes | The [work item](#work-item-shape) to dispatch |
 | `pCallbacks` | object \| null | No | `{ onProgress, onBinaryData, onError }`. Pass `null` to ignore intermediate frames. |
-| `fCallback` | function | Yes | `function (pError, pResult)` — the terminal callback |
+| `fCallback` | function | Yes | `function (pError, pResult)` - the terminal callback |
 
 **Callbacks object:**
 
@@ -231,7 +231,7 @@ _Client.dispatchStream(
 |----------|-------|----------|
 | `onProgress(pProgress)` | `0x01` | Parsed JSON progress object (e.g. `{ Percent, Message, Step, TotalSteps }`) |
 | `onBinaryData(pBuffer)` | `0x02` | A `Buffer` of intermediate binary data |
-| `onError(pErrorNotice)` | `0x05` | Parsed JSON error notification (e.g. `{ Error }`) — non-fatal |
+| `onError(pErrorNotice)` | `0x05` | Parsed JSON error notification (e.g. `{ Error }`) - non-fatal |
 
 Each callback is optional. Malformed JSON in a progress, result, or error frame is silently ignored rather than aborting the stream.
 
@@ -288,7 +288,7 @@ The client always requests synchronous execution (`Async: false`) and waits for 
 
 **Response handling:**
 
-- **`application/octet-stream`** — the body is buffered and the callback receives:
+- **`application/octet-stream`** - the body is buffered and the callback receives:
 
   ```javascript
   {
@@ -300,7 +300,7 @@ The client always requests synchronous execution (`Async: false`) and waits for 
   }
   ```
 
-- **Otherwise (JSON)** — the body is parsed. On HTTP 400+ the callback errors using the body's `Error` field. On HTTP < 400 with `Success` falsy, the callback errors with the first entry of `Errors` when present, otherwise `operation trigger failed`. On success the parsed JSON envelope is returned as `pResult` (typically including `Success`, `RunHash`, `Status`, `OperationState`, `TaskOutputs`, `Output`, `Errors`, `Log`, `ElapsedMs`).
+- **Otherwise (JSON)** - the body is parsed. On HTTP 400+ the callback errors using the body's `Error` field. On HTTP < 400 with `Success` falsy, the callback errors with the first entry of `Errors` when present, otherwise `operation trigger failed`. On success the parsed JSON envelope is returned as `pResult` (typically including `Success`, `RunHash`, `Status`, `OperationState`, `TaskOutputs`, `Output`, `Errors`, `Log`, `ElapsedMs`).
 - A JSON parse failure produces an `invalid response from trigger` error.
 
 The socket timeout is disabled (`0`). The callback fires exactly once.
@@ -323,7 +323,7 @@ _Client.getStatus(
 |-----------|------|-------------|
 | `fCallback` | function | `function (pError, pResult)` |
 
-**Result:** `pResult` is the `/Beacon/Capabilities` payload — `{ Capabilities, BeaconCount }` (the coordinator additionally returns an `ActionCatalog` array describing the available actions). `Capabilities` is the de-duplicated set of capability names across all registered beacons; `BeaconCount` is the number of registered beacons.
+**Result:** `pResult` is the `/Beacon/Capabilities` payload - `{ Capabilities, BeaconCount }` (the coordinator additionally returns an `ActionCatalog` array describing the available actions). `Capabilities` is the de-duplicated set of capability names across all registered beacons; `BeaconCount` is the number of registered beacons.
 
 > The coordinator's `/Beacon/Capabilities` endpoint does not require a session, so `getStatus()` works as a health check even before `authenticate()`.
 
@@ -344,7 +344,7 @@ A work item describes a unit of work for a beacon to perform:
 | Field | Type | Notes |
 |-------|------|-------|
 | `Capability` | string | **Required.** The named capability a beacon must advertise. |
-| `Action` | string | Required in practice — the action within the capability. The coordinator defaults it to `'Execute'` if omitted. |
+| `Action` | string | Required in practice - the action within the capability. The coordinator defaults it to `'Execute'` if omitted. |
 | `Settings` | object | Action-specific payload handed to the beacon provider. |
 | `AffinityKey` | string | Routes repeated work to the same beacon, enabling source-file caching across work items. |
 | `TimeoutMs` | number | Coordinator-side cap on execution time. The coordinator defaults it to `300000` if omitted. |

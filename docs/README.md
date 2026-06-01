@@ -4,13 +4,13 @@ An HTTP client for the [Ultravisor](https://github.com/stevenvelozo/ultravisor) 
 
 ## What It Does
 
-Ultravisor coordinates distributed work. Worker nodes — **beacons** — register with the coordinator and advertise the capabilities they can perform. This client is the *other* side of that arrangement: it authenticates against the coordinator and submits work for those beacons to run.
+Ultravisor coordinates distributed work. Worker nodes - **beacons** - register with the coordinator and advertise the capabilities they can perform. This client is the *other* side of that arrangement: it authenticates against the coordinator and submits work for those beacons to run.
 
-- **Authentication** — POST credentials to `/1.0/Authenticate` and capture the session cookie for subsequent requests.
-- **Synchronous dispatch** — Submit a work item and block on a single JSON result envelope.
-- **Streaming dispatch** — Submit a work item and receive progress events, intermediate binary chunks, and a final binary output over a framed `application/octet-stream` response.
-- **Operation triggering** — Run a pre-configured Ultravisor operation by hash, receiving either a JSON envelope or a raw binary buffer.
-- **Status** — Read the capabilities currently advertised by connected beacons.
+- **Authentication** - POST credentials to `/1.0/Authenticate` and capture the session cookie for subsequent requests.
+- **Synchronous dispatch** - Submit a work item and block on a single JSON result envelope.
+- **Streaming dispatch** - Submit a work item and receive progress events, intermediate binary chunks, and a final binary output over a framed `application/octet-stream` response.
+- **Operation triggering** - Run a pre-configured Ultravisor operation by hash, receiving either a JSON envelope or a raw binary buffer.
+- **Status** - Read the capabilities currently advertised by connected beacons.
 
 ## Quick Example
 
@@ -64,12 +64,12 @@ npm install fable-ultravisor-client
 
 ## Documentation
 
-- [Quick Start](quickstart.md) — Authenticate and dispatch your first work item
-- [API Reference](api.md) — Every method, with verified signatures and the work-item shape
-- [Binary Frame Protocol](binary-frame-protocol.md) — The `binary-frames-v1` wire format used by streaming dispatch
+- [Quick Start](quickstart.md) - Authenticate and dispatch your first work item
+- [API Reference](api.md) - Every method, with verified signatures and the work-item shape
+- [Binary Frame Protocol](binary-frame-protocol.md) - The `binary-frames-v1` wire format used by streaming dispatch
 
 ## Related Modules
 
-- [fable](https://fable-retold.github.io/fable/) — The service dependency-injection framework this client plugs into
-- [ultravisor](https://stevenvelozo.github.io/ultravisor/) — The coordinator/orchestration server this client talks to
-- [ultravisor-beacon](https://stevenvelozo.github.io/ultravisor-beacon/) — The worker that executes dispatched work (the other end of the wire)
+- [fable](https://fable-retold.github.io/fable/) - The service dependency-injection framework this client plugs into
+- [ultravisor](https://stevenvelozo.github.io/ultravisor/) - The coordinator/orchestration server this client talks to
+- [ultravisor-beacon](https://stevenvelozo.github.io/ultravisor-beacon/) - The worker that executes dispatched work (the other end of the wire)
