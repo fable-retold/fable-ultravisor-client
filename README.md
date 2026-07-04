@@ -4,7 +4,7 @@
 
 Fable service that talks to an [Ultravisor](https://github.com/stevenvelozo/ultravisor) beacon coordinator over HTTP. Handles authentication, work-item dispatch (synchronous JSON and binary-framed streaming), and operation triggering.
 
-Part of the [retold](https://github.com/stevenvelozo/retold) ecosystem.
+Part of the [retold](https://github.com/fable-retold/retold) ecosystem.
 
 ## Install
 
